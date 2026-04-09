@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Hayase",
+    "slug": "hayase",
+    "version": "6.4.282",
+    "orientation": "default",
+    "icon": "./assets/logo.svg",
+    "scheme": "hayase",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/logo.svg",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.hayase.interface",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.svg",
+        "backgroundColor": "#000000"
+      },
+      "package": "app.hayase.interface"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./static/logo_white_fit.svg"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

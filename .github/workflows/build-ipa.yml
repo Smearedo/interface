@@ -9,60 +9,90 @@ on:
 
 jobs:
   build-ipa:
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.19
-          cache: 'pnpm'
+          node-version: 22
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          expo-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+        run: npm ci
 
       - name: Prebuild iOS
-        run: npx expo prebuild --platform ios --no-install
+        run: npx expo prebuild --platform ios --clean
 
       - name: Install CocoaPods
-        run: cd ios && pod install
+        run: |
+          cd ios
+          bundle install 2>/dev/null || true
+          pod install --repo-update
 
-      - name: Build unsigned IPA
+      - name: Determine Xcode scheme
+        id: scheme
+        run: |
+          SCHEME=$(xcodebuild -workspace ios/Hayase.xcworkspace -list -json 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['workspace']['schemes'][0])" 2>/dev/null || echo "Hayase")
+          echo "name=$SCHEME" >> "$GITHUB_OUTPUT"
+          echo "Detected scheme: $SCHEME"
+
+      - name: Build unsigned app
         run: |
           xcodebuild \
-            -workspace ios/hayase.xcworkspace \
-            -scheme hayase \
+            -workspace ios/Hayase.xcworkspace \
+            -scheme "${{ steps.scheme.outputs.name }}" \
             -configuration Release \
             -sdk iphoneos \
-            -archivePath $RUNNER_TEMP/hayase.xcarchive \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            -archivePath "$RUNNER_TEMP/Hayase.xcarchive" \
             archive \
-            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGN_ENTITLEMENTS="" \
+            DEVELOPMENT_TEAM="" \
+            PROVISIONING_PROFILE_SPECIFIER=""
 
-      - name: Create unsigned IPA
+      - name: Package unsigned IPA
         run: |
-          mkdir -p $RUNNER_TEMP/Payload
-          cp -r $RUNNER_TEMP/hayase.xcarchive/Products/Applications/hayase.app $RUNNER_TEMP/Payload/
-          cd $RUNNER_TEMP
-          zip -r hayase-unsigned.ipa Payload
+          set -euo pipefail
+
+          # Find the .app bundle inside the archive
+          APP_PATH=$(find "$RUNNER_TEMP/Hayase.xcarchive/Products" -name "*.app" -type d | head -1)
+          if [ -z "$APP_PATH" ]; then
+            echo "ERROR: No .app found in archive Products directory"
+            echo "Archive contents:"
+            find "$RUNNER_TEMP/Hayase.xcarchive" -type d -maxdepth 4
+            exit 1
+          fi
+          echo "Found app: $APP_PATH"
+
+          # Strip any embedded code signatures that may be invalid
+          find "$APP_PATH" -name "_CodeSignature" -type d -exec rm -rf {} + 2>/dev/null || true
+
+          # Re-sign with ad-hoc identity so the IPA structure is valid
+          /usr/bin/codesign --force --sign - --deep --preserve-metadata=identifier,entitlements "$APP_PATH" 2>/dev/null || true
+
+          # Create Payload structure and zip into IPA
+          STAGE_DIR="$RUNNER_TEMP/ipa_stage"
+          mkdir -p "$STAGE_DIR/Payload"
+          cp -R "$APP_PATH" "$STAGE_DIR/Payload/"
+
+          cd "$STAGE_DIR"
+          zip -r -9 "$RUNNER_TEMP/Hayase.ipa" Payload
+
+          echo "IPA size: $(du -h "$RUNNER_TEMP/Hayase.ipa" | cut -f1)"
+          echo "IPA contents:"
+          unzip -l "$RUNNER_TEMP/Hayase.ipa" | head -20
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hayase-unsigned-ipa
-          path: ${{ runner.temp }}/hayase-unsigned.ipa
-          retention-days: 30
+          name: Hayase-unsigned
+          path: ${{ runner.temp }}/Hayase.ipa
+          retention-days: 90

@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router'
 import { Button, Input, Toggle } from '@/components/ui'
 import { SettingCard } from '@/components'
 import { useSettingsStore } from '@/stores/settings'
-import { fastPrettyBytes } from '@/utils'
 
 interface CheckResult {
   status: 'warning' | 'success' | 'error'

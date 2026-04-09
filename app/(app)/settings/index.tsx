@@ -10,7 +10,7 @@ interface NavItem {
 }
 
 const items: NavItem[] = [
-  { title: 'Player', path: '/(app)/settings' },
+  { title: 'Player', path: '/(app)/settings/player' },
   { title: 'Client', path: '/(app)/settings/client' },
   { title: 'Interface', path: '/(app)/settings/interface' },
   { title: 'Extensions', path: '/(app)/settings/extensions' },

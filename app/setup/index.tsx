@@ -15,7 +15,7 @@ export default function SetupPage () {
       <View className="items-center mt-14">
         <View className="relative">
           <Text className="text-foreground text-5xl font-bold text-center">Welcome to Hayase</Text>
-          <Text className="text-theme text-lg absolute -top-5 -right-20 rotate-12" style={{ transform: [{ rotate: '12deg' }] }}>Previously known as Miru!</Text>
+          <Text className="text-theme text-lg absolute -top-5 -right-20" style={{ transform: [{ rotate: '12deg' }] }}>Previously known as Miru!</Text>
         </View>
       </View>
       <Text className="text-muted-foreground text-center mt-3 px-3">Let's set up your perfect streaming environment.</Text>

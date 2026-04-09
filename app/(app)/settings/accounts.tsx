@@ -142,7 +142,7 @@ export default function AccountsSettingsPage () {
             <Text className="text-muted-foreground text-[9px] leading-snug">Local</Text>
           </View>
         </View>
-        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-end items-center h-17 gap-4">
+        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-end items-center gap-4" style={{ height: 68 }}>
           <Text className="text-muted-foreground text-xs">Works Offline</Text>
           <View className="flex-row items-center gap-2">
             <Toggle value={true} onValueChange={() => {}} />

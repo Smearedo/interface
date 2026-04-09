@@ -22,15 +22,19 @@ export function toTS (d: number): string {
 }
 
 export function fastPrettyBytes (num: number): string {
-  if (num === 0) return '0 B'
-  const units = ['B', 'KB', 'MB', 'GB', 'TB']
-  const exponent = Math.min(Math.floor(Math.log(num) / Math.log(1024)), units.length - 1)
-  const value = num / Math.pow(1024, exponent)
-  return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`
+  if (isNaN(num)) return '0 B'
+  if (num < 1) return num + ' B'
+  const units = [' B', ' kB', ' MB', ' GB', ' TB']
+  const exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1)
+  return Number((num / Math.pow(1000, exponent)).toFixed(1)) + units[exponent]!
 }
 
 export function fastPrettyBits (num: number): string {
-  return fastPrettyBytes(num).replace('B', 'b')
+  if (isNaN(num)) return '0 b'
+  if (num < 1) return num + ' b'
+  const units = [' b', ' kb', ' Mb', ' Gb', ' Tb']
+  const exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1)
+  return Number((num / Math.pow(1000, exponent)).toFixed(1)) + units[exponent]!
 }
 
 export function toTimeString (ms: number): string {

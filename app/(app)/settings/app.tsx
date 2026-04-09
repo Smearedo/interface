@@ -1,62 +1,73 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Alert } from 'react-native'
 import { SettingCard } from '@/components'
-import { Toggle, Select } from '@/components/ui'
+import { Button, Toggle, Select } from '@/components/ui'
 import { useSettingsStore } from '@/stores/settings'
-import { videoResolutions, lookupPreferences } from '@/modules/settings'
+
+const debugOpts = {
+  '': 'None',
+  '*': 'All',
+  'torrent:*,webtorrent:*,simple-peer,bittorrent-protocol,bittorrent-dht,bittorrent-lsd,torrent-discovery,bittorrent-tracker:*,ut_metadata,nat-pmp,nat-api': 'Torrent',
+  'ui:*': 'Interface'
+}
 
 export default function AppSettingsPage () {
   const { settings, setSettings } = useSettingsStore()
 
+  const handleReset = () => {
+    Alert.alert(
+      'Reset Everything',
+      'This will reset all settings to their defaults. Are you sure?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => {
+            // Reset all settings
+            useSettingsStore.getState().resetSettings()
+          }
+        }
+      ]
+    )
+  }
+
   return (
     <View className="flex-1 bg-background">
-      <View className="px-4 py-3 border-b border-border">
-        <Text className="text-foreground font-semibold text-lg">App Settings</Text>
-      </View>
-      <ScrollView className="flex-1">
-        <SettingCard title="Autoplay" description="Auto-play next episode">
-          <Toggle
-            value={settings.playerAutoplay}
-            onValueChange={(v) => setSettings({ playerAutoplay: v })}
-          />
-        </SettingCard>
-        <SettingCard title="Auto-Complete" description="Mark episode as watched automatically">
-          <Toggle
-            value={settings.playerAutocomplete}
-            onValueChange={(v) => setSettings({ playerAutocomplete: v })}
-          />
-        </SettingCard>
-        <SettingCard title="Skip Opening" description="Auto-skip opening themes">
-          <Toggle
-            value={settings.playerSkip}
-            onValueChange={(v) => setSettings({ playerSkip: v })}
-          />
-        </SettingCard>
-        <SettingCard title="Skip Filler" description="Auto-skip filler episodes">
-          <Toggle
-            value={settings.playerSkipFiller}
-            onValueChange={(v) => setSettings({ playerSkipFiller: v })}
-          />
-        </SettingCard>
-        <SettingCard title="Search Quality">
+      <ScrollView className="flex-1" contentContainerStyle={{ gap: 12, padding: 16 }}>
+        <Text className="text-xl font-bold text-foreground">App Settings</Text>
+
+        <View className="flex-row gap-3">
+          <Button className="flex-1 font-bold" onPress={() => {}}>
+            Import Settings From File
+          </Button>
+          <Button className="flex-1 font-bold" onPress={() => {}}>
+            Export Settings To File
+          </Button>
+        </View>
+        <Button variant="destructive" className="font-bold" onPress={handleReset}>
+          Reset EVERYTHING To Default
+        </Button>
+
+        <Text className="text-xl font-bold text-foreground mt-4">Debug Settings</Text>
+        <SettingCard
+          title="Logging Levels"
+          description="Enable logging of specific parts of the app. These logs are saved to the app's log directory."
+        >
           <Select
-            options={Object.entries(videoResolutions).map(([value, label]) => ({ value, label }))}
-            value={settings.searchQuality}
-            onValueChange={(v) => setSettings({ searchQuality: v as typeof settings.searchQuality })}
+            options={Object.entries(debugOpts).map(([value, label]) => ({ value, label }))}
+            value=""
+            onValueChange={() => {}}
           />
         </SettingCard>
-        <SettingCard title="Lookup Preference">
-          <Select
-            options={Object.entries(lookupPreferences).map(([value, label]) => ({ value, label }))}
-            value={settings.lookupPreference}
-            onValueChange={(v) => setSettings({ lookupPreference: v as typeof settings.lookupPreference })}
-          />
-        </SettingCard>
-        <SettingCard title="Auto-Select" description="Automatically select best torrent result">
-          <Toggle
-            value={settings.searchAutoSelect}
-            onValueChange={(v) => setSettings({ searchAutoSelect: v })}
-          />
+
+        <SettingCard
+          title="App and Device Info"
+          description="Copy app and device debug info and capabilities, such as GPU information, GPU capabilities, version information and settings to clipboard."
+        >
+          <Button className="font-bold" onPress={() => {}}>
+            Copy To Clipboard
+          </Button>
         </SettingCard>
       </ScrollView>
     </View>

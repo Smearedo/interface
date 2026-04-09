@@ -1,10 +1,21 @@
-import React from 'react'
-import { View, Text, ScrollView, Linking } from 'react-native'
-import { Button, Avatar, Separator } from '@/components/ui'
+import React, { useState } from 'react'
+import { View, Text, ScrollView, Pressable, Linking } from 'react-native'
+import { Button, Input, Toggle, Avatar, Separator } from '@/components/ui'
 import { useAuthStore } from '@/stores/auth'
 
+const titleTypes = {
+  ROMAJI: 'Romaji (Shingeki no Kyojin)',
+  ENGLISH: 'English (Attack on Titan)',
+  NATIVE: 'Native (進撃の巨人)',
+  ROMAJI_STYLISED: 'Romaji Stylised',
+  ENGLISH_STYLISED: 'English Stylised',
+  NATIVE_STYLISED: 'Native Stylised'
+} as const
+
 export default function AccountsSettingsPage () {
-  const { anilistToken, malToken, kitsuToken, logout } = useAuthStore()
+  const { anilistToken, malToken, kitsuToken } = useAuthStore()
+  const [kitsuLogin, setKitsuLogin] = useState('')
+  const [kitsuPassword, setKitsuPassword] = useState('')
 
   const handleAnilistLogin = () => {
     const clientId = '26159'
@@ -12,89 +23,133 @@ export default function AccountsSettingsPage () {
     Linking.openURL(url)
   }
 
-  const handleMalLogin = () => {
-    // MAL OAuth flow would go here
-  }
-
   return (
-    <View className="flex-1 bg-background">
-      <View className="px-4 py-3 border-b border-border">
-        <Text className="text-foreground font-semibold text-lg">Accounts</Text>
-      </View>
-      <ScrollView className="flex-1 px-4 pt-4">
-        {/* AniList */}
-        <View className="mb-6">
-          <Text className="text-foreground font-semibold text-base mb-2">AniList</Text>
+    <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 16, gap: 12 }}>
+      {/* AniList */}
+      <View>
+        <View className="bg-neutral-900 px-6 py-4 rounded-t-md flex-row items-center gap-3">
           {anilistToken ? (
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center gap-3">
-                <Avatar size={32} fallback="A" />
+            <View className="flex-row items-center gap-3 flex-1">
+              <Avatar size={32} fallback="A" />
+              <View>
                 <Text className="text-foreground text-sm">Connected</Text>
+                <Text className="text-muted-foreground text-[9px] leading-snug">AniList</Text>
               </View>
-              <Button variant="destructive" size="sm" onPress={() => useAuthStore.getState().setAnilistToken(null)}>
-                Disconnect
-              </Button>
             </View>
           ) : (
-            <Button variant="outline" onPress={handleAnilistLogin} className="w-full">
-              Connect AniList
-            </Button>
-          )}
-        </View>
-
-        <Separator className="mb-6" />
-
-        {/* MyAnimeList */}
-        <View className="mb-6">
-          <Text className="text-foreground font-semibold text-base mb-2">MyAnimeList</Text>
-          {malToken ? (
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center gap-3">
-                <Avatar size={32} fallback="M" />
-                <Text className="text-foreground text-sm">Connected</Text>
-              </View>
-              <Button variant="destructive" size="sm" onPress={() => useAuthStore.getState().setMalToken(null)}>
-                Disconnect
-              </Button>
+            <View className="flex-1">
+              <Text className="text-foreground text-sm">Not logged in</Text>
+              <Text className="text-muted-foreground text-[9px] leading-snug">AniList</Text>
             </View>
-          ) : (
-            <Button variant="outline" onPress={handleMalLogin} className="w-full">
-              Connect MyAnimeList
-            </Button>
           )}
         </View>
+        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-between items-center">
+          <View className="flex-row items-center gap-2">
+            {anilistToken ? (
+              <Button variant="secondary" onPress={() => useAuthStore.getState().setAnilistToken(null)}>
+                Logout
+              </Button>
+            ) : (
+              <Button variant="secondary" onPress={handleAnilistLogin}>
+                Login
+              </Button>
+            )}
+          </View>
+          <View className="flex-row items-center gap-2">
+            <Toggle value={true} onValueChange={() => {}} />
+            <Text className="text-foreground text-sm">Enable Sync</Text>
+          </View>
+        </View>
+      </View>
 
-        <Separator className="mb-6" />
-
-        {/* Kitsu */}
-        <View className="mb-6">
-          <Text className="text-foreground font-semibold text-base mb-2">Kitsu</Text>
+      {/* Kitsu */}
+      <View>
+        <View className="bg-neutral-900 px-6 py-4 rounded-t-md flex-row items-center gap-3">
           {kitsuToken ? (
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center gap-3">
-                <Avatar size={32} fallback="K" />
+            <View className="flex-row items-center gap-3 flex-1">
+              <Avatar size={32} fallback="K" />
+              <View>
                 <Text className="text-foreground text-sm">Connected</Text>
+                <Text className="text-muted-foreground text-[9px] leading-snug">Kitsu</Text>
               </View>
-              <Button variant="destructive" size="sm" onPress={() => useAuthStore.getState().setKitsuToken(null)}>
-                Disconnect
-              </Button>
             </View>
           ) : (
-            <Button variant="outline" onPress={() => {}} className="w-full">
-              Connect Kitsu
-            </Button>
+            <View className="flex-1">
+              <Text className="text-foreground text-sm">Not logged in</Text>
+              <Text className="text-muted-foreground text-[9px] leading-snug">Kitsu</Text>
+            </View>
           )}
         </View>
-
-        {(anilistToken || malToken || kitsuToken) && (
-          <>
-            <Separator className="mb-6" />
-            <Button variant="destructive" onPress={logout} className="w-full">
-              Logout All Accounts
+        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-between items-center">
+          {kitsuToken ? (
+            <Button variant="secondary" onPress={() => useAuthStore.getState().setKitsuToken(null)}>
+              Logout
             </Button>
-          </>
-        )}
-      </ScrollView>
-    </View>
+          ) : (
+            <Button variant="secondary" onPress={() => {}}>
+              Login
+            </Button>
+          )}
+          <View className="flex-row items-center gap-2">
+            <Toggle value={true} onValueChange={() => {}} />
+            <Text className="text-foreground text-sm">Enable Sync</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* MyAnimeList */}
+      <View>
+        <View className="bg-neutral-900 px-6 py-4 rounded-t-md flex-row items-center gap-3">
+          {malToken ? (
+            <View className="flex-row items-center gap-3 flex-1">
+              <Avatar size={32} fallback="M" />
+              <View>
+                <Text className="text-foreground text-sm">Connected</Text>
+                <Text className="text-muted-foreground text-[9px] leading-snug">MyAnimeList</Text>
+              </View>
+            </View>
+          ) : (
+            <View className="flex-1">
+              <Text className="text-foreground text-sm">Not logged in</Text>
+              <Text className="text-muted-foreground text-[9px] leading-snug">MyAnimeList</Text>
+            </View>
+          )}
+        </View>
+        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-between items-center">
+          <View className="flex-row items-center gap-2">
+            {malToken ? (
+              <Button variant="secondary" onPress={() => useAuthStore.getState().setMalToken(null)}>
+                Logout
+              </Button>
+            ) : (
+              <Button variant="secondary" onPress={() => {}}>
+                Login
+              </Button>
+            )}
+          </View>
+          <View className="flex-row items-center gap-2">
+            <Toggle value={true} onValueChange={() => {}} />
+            <Text className="text-foreground text-sm">Enable Sync</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Other / Local */}
+      <View>
+        <View className="bg-neutral-900 px-6 py-4 rounded-t-md flex-row items-center gap-3">
+          <View className="flex-1">
+            <Text className="text-foreground text-sm">Other</Text>
+            <Text className="text-muted-foreground text-[9px] leading-snug">Local</Text>
+          </View>
+        </View>
+        <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-end items-center h-17 gap-4">
+          <Text className="text-muted-foreground text-xs">Works Offline</Text>
+          <View className="flex-row items-center gap-2">
+            <Toggle value={true} onValueChange={() => {}} />
+            <Text className="text-foreground text-sm">Enable Sync</Text>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   )
 }

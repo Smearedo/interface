@@ -1,49 +1,71 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
-import { COMMITS_URL, APP_VERSION } from '@/modules/constants'
+import { Separator } from '@/components/ui'
+import { COMMITS_URL } from '@/modules/constants'
 
 interface Commit {
   sha: string
   commit: {
     message: string
-    author: { name: string; date: string }
+    author: { date: string }
   }
 }
 
 export default function ChangelogPage () {
   const [commits, setCommits] = useState<Commit[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(COMMITS_URL + '?per_page=30')
+    fetch(COMMITS_URL)
       .then(r => r.json())
-      .then(data => setCommits(Array.isArray(data) ? data : []))
-      .catch(() => setCommits([]))
+      .then((data: Commit[]) => {
+        setCommits(Array.isArray(data) ? data.map(({ sha, commit }) => ({ sha, commit })) : [])
+      })
+      .catch((e) => setError(e.stack || e.message))
       .finally(() => setLoading(false))
   }, [])
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="px-4 py-3 border-b border-border">
-        <Text className="text-foreground font-semibold text-lg">Changelog</Text>
-        <Text className="text-muted-foreground text-xs">v{APP_VERSION}</Text>
+    <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 16 }}>
+      <View className="h-60 justify-center">
+        <Text className="text-foreground text-4xl font-bold mb-3">Changelog</Text>
+        <Text className="text-muted-foreground text-sm">New updates and improvements to Hayase.</Text>
       </View>
-      <ScrollView className="flex-1 px-4 pt-4">
-        {loading ? (
-          <ActivityIndicator size="large" color="#fafafa" className="mt-8" />
-        ) : (
-          commits.map((commit) => (
-            <View key={commit.sha} className="mb-4 pb-4 border-b border-border">
-              <Text className="text-foreground text-sm" numberOfLines={2}>
-                {commit.commit.message.split('\n')[0]}
+
+      {loading ? (
+        Array.from({ length: 5 }).map((_, i) => (
+          <View key={i}>
+            <Separator className="my-6" />
+            <View className="py-4">
+              <View className="bg-primary/5 rounded h-2 w-28 mb-3" />
+              <View className="bg-primary/5 rounded h-4 w-48" />
+              <View className="mt-3 bg-primary/5 rounded h-2 w-32" />
+              <View className="mt-2 bg-primary/5 rounded h-2 w-28" />
+            </View>
+          </View>
+        ))
+      ) : error ? (
+        <View className="py-8">
+          <Text className="text-foreground text-2xl font-bold mb-3">Failed to load changelog</Text>
+          <Text className="text-muted-foreground text-xs">{error}</Text>
+        </View>
+      ) : (
+        commits.map(({ sha, commit }) => (
+          <View key={sha}>
+            <Separator className="my-6" />
+            <View className="py-4">
+              <Text className="text-muted-foreground text-xs mb-3">
+                {new Date(commit.author.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </Text>
-              <Text className="text-muted-foreground text-xs mt-1">
-                {commit.commit.author.name} • {new Date(commit.commit.author.date).toLocaleDateString()}
+              <Text className="text-foreground text-lg font-bold mb-3">{sha.slice(0, 6)}</Text>
+              <Text className="text-muted-foreground text-base">
+                {commit.message.replaceAll('- ', '').trim()}
               </Text>
             </View>
-          ))
-        )}
-      </ScrollView>
-    </View>
+          </View>
+        ))
+      )}
+    </ScrollView>
   )
 }

@@ -99,7 +99,7 @@ export default function PlayerSettingsPage () {
             <Input
               keyboardType="numeric"
               value={String(settings.playerSeek)}
-              onChangeText={(v) => setSettings({ playerSeek: parseInt(v) || 5 })}
+              onChangeText={(v) => setSettings({ playerSeek: String(parseInt(v) || 5) })}
               className="w-32 bg-background border-0"
             />
             <Text className="text-foreground text-sm pr-3">sec</Text>

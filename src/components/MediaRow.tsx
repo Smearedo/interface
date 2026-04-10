@@ -9,7 +9,7 @@ interface MediaRowProps {
   title: string
   media: Media[] | null | undefined
   loading?: boolean
-  searchVariables?: Record<string, unknown>
+  searchVariables?: Record<string, unknown> | import('@/modules/anilist/client').SearchVariables
 }
 
 export function MediaRow ({ title, media, loading, searchVariables }: MediaRowProps) {

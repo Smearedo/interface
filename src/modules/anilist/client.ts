@@ -17,11 +17,11 @@ function createAnilistClient (): Client {
     exchanges: [cacheExchange, fetchExchange],
     fetchOptions: () => {
       const token = useAuthStore.getState().anilistToken
-      return {
-        headers: token
-          ? { Authorization: `Bearer ${token}` }
-          : {}
+      const headers: Record<string, string> = {}
+      if (token) {
+        headers.Authorization = `Bearer ${token}`
       }
+      return { headers }
     }
   })
 }

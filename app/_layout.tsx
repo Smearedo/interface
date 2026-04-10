@@ -43,7 +43,7 @@ export default function RootLayout () {
   if (!fontsLoaded) return null
 
   return (
-    <View className="flex-1 bg-black" style={{ fontFamily: 'Nunito' }}>
+    <View className="flex-1 bg-black">
       <StatusBar style="light" />
       <Stack
         screenOptions={{

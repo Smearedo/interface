@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, View, Text, Pressable, type ModalProps } from 'react-native'
+import { Modal, View, Text, Pressable } from 'react-native'
 import { cn } from '@/utils'
 
 interface DialogProps {

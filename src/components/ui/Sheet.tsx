@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Pressable, View, Text, Animated, Dimensions, useWindowDimensions } from 'react-native'
+import { Modal, Pressable, View, Text, useWindowDimensions } from 'react-native'
 import { X } from 'lucide-react-native'
 import { cn } from '@/utils'
 

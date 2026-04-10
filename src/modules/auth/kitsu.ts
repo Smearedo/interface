@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { mappings, mappingsByKitsuId } from '../anizip'
 
-import type { Anime, Fav, KEntry, KitsuError, KitsuMediaStatus, Mapping, OAuth, Res, Resource, ResSingle, User } from './kitsu-types'
+import type { KitsuError, KitsuMediaStatus, OAuth, Res, User } from './kitsu-types'
 
 const debug = Debug('ui:kitsu')
 
@@ -16,7 +16,7 @@ const ENDPOINTS = {
 
 type ALMediaStatus = 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'DROPPED' | 'PAUSED' | 'REPEATING'
 
-const KITSU_TO_AL_STATUS: Record<KitsuMediaStatus, ALMediaStatus> = {
+const _KITSU_TO_AL_STATUS: Record<KitsuMediaStatus, ALMediaStatus> = {
   current: 'CURRENT',
   planned: 'PLANNING',
   completed: 'COMPLETED',
@@ -24,7 +24,7 @@ const KITSU_TO_AL_STATUS: Record<KitsuMediaStatus, ALMediaStatus> = {
   on_hold: 'PAUSED'
 }
 
-const AL_TO_KITSU_STATUS: Record<ALMediaStatus, KitsuMediaStatus> = {
+const _AL_TO_KITSU_STATUS: Record<ALMediaStatus, KitsuMediaStatus> = {
   CURRENT: 'current',
   PLANNING: 'planned',
   COMPLETED: 'completed',

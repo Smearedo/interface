@@ -1,7 +1,6 @@
 import Debug from 'debug'
 
 import { useSettingsStore } from '@/stores/settings'
-import { SUPPORTS } from './defaults'
 
 const _debug = Debug('ui:settings')
 

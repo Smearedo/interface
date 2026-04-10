@@ -16,7 +16,7 @@ const MAL_TO_AL_STATUS: Record<MALMediaStatus, ALMediaStatus> = {
   on_hold: 'PAUSED'
 }
 
-const AL_TO_MAL_STATUS: Record<ALMediaStatus, MALMediaStatus> = {
+const _AL_TO_MAL_STATUS: Record<ALMediaStatus, MALMediaStatus> = {
   CURRENT: 'watching',
   PLANNING: 'plan_to_watch',
   COMPLETED: 'completed',
@@ -48,7 +48,7 @@ interface MALUser {
   }
 }
 
-interface MALListUpdate {
+interface _MALListUpdate {
   status: MALMediaStatus
   num_watched_episodes?: number
   score?: number
@@ -68,7 +68,7 @@ interface MALStatus {
   num_times_rewatched: number
 }
 
-interface MALAnimeListItem {
+interface _MALAnimeListItem {
   node: {
     id: number
     title: string

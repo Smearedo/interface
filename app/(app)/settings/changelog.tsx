@@ -58,8 +58,8 @@ export default function ChangelogPage () {
               <Text className="text-muted-foreground text-xs mb-3">
                 {new Date(commit.author.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </Text>
-              <Text className="text-foreground text-lg font-bold mb-3 text-white">{sha.slice(0, 6)}</Text>
-              <Text className="text-muted-foreground text-md">
+              <Text className="text-white text-lg font-bold mb-3">{sha.slice(0, 6)}</Text>
+              <Text className="text-muted-foreground text-base">
                 {commit.message.replaceAll('- ', '').trim()}
               </Text>
             </View>

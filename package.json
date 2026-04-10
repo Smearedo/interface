@@ -16,8 +16,8 @@
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",
     "@expo/vector-icons": "^14.0.0",
-    "@react-native-async-storage/async-storage": "^3.0.2",
-    "@react-native-community/netinfo": "^12.0.1",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-community/netinfo": "11.4.1",
     "@react-navigation/native": "^7.0.0",
     "@urql/core": "^5.1.0",
     "@urql/exchange-auth": "^2.2.0",

@@ -1,9 +1,17 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Pressable } from 'react-native'
+import { Image } from 'expo-image'
 import { SettingCard } from '@/components'
 import { Toggle, Select, Input } from '@/components/ui'
 import { useSettingsStore } from '@/stores/settings'
 import { languageCodes, subtitleResolutions } from '@/modules/settings'
+
+const subtitleStyles = [
+  { value: 'none', label: 'None', emoji: '🚫' },
+  { value: 'gandhisans', label: 'Gandhi Sans Bold', image: require('../../../assets/gandhisans.png') },
+  { value: 'notosans', label: 'Noto Sans Bold', image: require('../../../assets/notosans.png') },
+  { value: 'roboto', label: 'Roboto Bold', image: require('../../../assets/roboto.png') }
+] as const
 
 export default function PlayerSettingsPage () {
   const { settings, setSettings } = useSettingsStore()
@@ -21,6 +29,34 @@ export default function PlayerSettingsPage () {
             value={settings.subtitleRenderHeight}
             onValueChange={(v) => setSettings({ subtitleRenderHeight: v as typeof settings.subtitleRenderHeight })}
           />
+        </SettingCard>
+        <SettingCard
+          className="md:flex-col md:items-start"
+          title="Subtitle Dialogue Style Overrides"
+          description={"Selectively override the default dialogue style for subtitles. This will not change the style of typesetting [Fancy 3D Signs and Songs].\n\nWarning: the heuristic used for deciding when to override the style is rather rough, and enabling this option can lead to incorrectly rendered subtitles."}
+        >
+          <View className="flex-row flex-wrap gap-3">
+            {subtitleStyles.map((style) => (
+              <Pressable
+                key={style.value}
+                onPress={() => setSettings({ subtitleStyle: style.value as typeof settings.subtitleStyle })}
+                className={`rounded-md border-2 overflow-hidden ${settings.subtitleStyle === style.value ? 'border-foreground' : 'border-border'}`}
+                style={{ width: 140, aspectRatio: 16 / 9 }}
+              >
+                {style.value === 'none' ? (
+                  <View className="flex-1 items-center justify-center bg-neutral-900">
+                    <Text className="text-xl font-bold text-foreground">{style.label}</Text>
+                    <Text className="text-4xl">{'emoji' in style ? style.emoji : ''}</Text>
+                  </View>
+                ) : (
+                  <View className="flex-1">
+                    <Image source={'image' in style ? style.image : undefined} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+                    <Text className="absolute top-2 left-0 right-0 text-center text-xl font-bold text-foreground">{style.label}</Text>
+                  </View>
+                )}
+              </Pressable>
+            ))}
+          </View>
         </SettingCard>
 
         <Text className="text-xl font-bold text-foreground mt-4">Language Settings</Text>
@@ -132,6 +168,17 @@ export default function PlayerSettingsPage () {
           <Toggle
             value={settings.minimalPlayerUI}
             onValueChange={(v) => setSettings({ minimalPlayerUI: v })}
+          />
+        </SettingCard>
+
+        <Text className="text-xl font-bold text-foreground mt-4">External Player Settings</Text>
+        <SettingCard
+          title="Enable External Player"
+          description="Opens a custom user-picked external video player to play video, instead of using the built-in one."
+        >
+          <Toggle
+            value={settings.enableExternal}
+            onValueChange={(v) => setSettings({ enableExternal: v })}
           />
         </SettingCard>
       </ScrollView>

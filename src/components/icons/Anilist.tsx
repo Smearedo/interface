@@ -6,7 +6,7 @@ interface AnilistProps {
   className?: string
 }
 
-export function Anilist ({ size = 41, _className }: AnilistProps) {
+export function Anilist ({ size = 41 }: AnilistProps) {
   const height = Math.round(size * (30 / 41))
   return (
     <Svg width={size} height={height} viewBox="0 0 41 30" fill="none">

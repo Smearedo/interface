@@ -32,6 +32,18 @@ export default function InterfaceSettingsPage () {
 
         <Text className="text-xl font-bold text-foreground mt-4">UI Settings</Text>
         <SettingCard
+          title="UI Scale"
+          description="Change the zoom level of the interface."
+        >
+          <Slider
+            value={settings.uiScale}
+            min={0.3}
+            max={2.5}
+            step={0.1}
+            onValueChange={(v) => setSettings({ uiScale: v })}
+          />
+        </SettingCard>
+        <SettingCard
           title="Navigation Buttons"
           description="Show backwards/forwards navigation buttons for when mouse buttons aren't available."
         >

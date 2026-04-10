@@ -52,7 +52,7 @@ export default function AppSettingsPage () {
         <Text className="text-xl font-bold text-foreground mt-4">Debug Settings</Text>
         <SettingCard
           title="Logging Levels"
-          description="Enable logging of specific parts of the app. These logs are saved to the app's log directory."
+          description="Enable logging of specific parts of the app. These logs are saved to %appdata$/Hayase/logs/main.log or ~/config/Hayase/logs/main.log."
         >
           <Select
             options={Object.entries(debugOpts).map(([value, label]) => ({ value, label }))}

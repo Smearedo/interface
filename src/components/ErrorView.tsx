@@ -17,7 +17,7 @@ export function ErrorView ({ statusCode = 404, message = 'Error' }: ErrorViewPro
         <Text className="text-foreground text-xl font-light flex-shrink">{message}</Text>
       </View>
       <Image
-        source={require('../../static/confused.webp')}
+        source={require('../../assets/confused.webp')}
         style={{ width: 300, height: 300 }}
         contentFit="contain"
       />

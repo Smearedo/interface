@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, Pressable, Linking } from 'react-native'
+import { View, Text, ScrollView, Pressable, Linking, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Heart } from 'lucide-react-native'
 import { APP_VERSION } from '@/modules/constants'
@@ -35,14 +35,20 @@ export default function SettingsPage () {
         {/* Support the Project box */}
         <Pressable
           onPress={() => Linking.openURL('https://github.com/sponsors/ThaUnknown/')}
-          className="px-6 py-4 rounded bg-fuchsia-400 mb-4"
         >
-          <Text className="font-bold text-secondary text-base">Support the Project</Text>
-          <Text className="text-xs text-secondary mt-1">Please consider supporting the development of Hayase by donating!</Text>
-          <View className="flex-row items-center gap-2 mt-2">
-            <Heart size={18} color="#fa68b6" fill="#fa68b6" />
-            <Text className="font-bold text-secondary">Donate</Text>
-          </View>
+          <ImageBackground
+            source={require('../../../assets/flowers.png')}
+            resizeMode="cover"
+            className="px-6 py-4 rounded bg-fuchsia-400 mb-4 overflow-hidden"
+            imageStyle={{ opacity: 0.7 }}
+          >
+            <Text className="font-bold text-secondary text-base">Support the Project</Text>
+            <Text className="text-xs text-secondary mt-1">Please consider supporting the development of Hayase by donating!</Text>
+            <View className="flex-row items-center gap-2 mt-2">
+              <Heart size={18} color="#fa68b6" fill="#fa68b6" />
+              <Text className="font-bold text-secondary">Donate</Text>
+            </View>
+          </ImageBackground>
         </Pressable>
 
         {/* Navigation items */}

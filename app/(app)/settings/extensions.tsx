@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { SettingCard } from '@/components'
-import { Button, Select, Toggle } from '@/components/ui'
+import { Button, Input, Select, Tabs, Toggle } from '@/components/ui'
 import { useSettingsStore } from '@/stores/settings'
 import { videoResolutions, lookupPreferences } from '@/modules/settings'
 
+const extensionTabs = [
+  { value: 'extensions', label: 'Extensions' },
+  { value: 'repositories', label: 'Repositories' }
+]
+
 export default function ExtensionsSettingsPage () {
   const { settings, setSettings } = useSettingsStore()
+  const [extensionUrl, setExtensionUrl] = useState('')
 
   return (
     <View className="flex-1 bg-background">
@@ -43,11 +49,51 @@ export default function ExtensionsSettingsPage () {
         </SettingCard>
 
         <Text className="text-xl font-bold text-foreground mt-4">Extension Settings</Text>
-        <View className="items-center justify-center py-20">
-          <Text className="text-muted-foreground text-center">
-            No extensions installed.{'\n'}Add extensions to enhance your experience.
-          </Text>
-        </View>
+        <Tabs items={extensionTabs} defaultValue="extensions">
+          {(activeTab) => (
+            <View className="mt-3">
+              {activeTab === 'extensions' && (
+                <View className="gap-3">
+                  <View className="flex-row gap-2">
+                    <Input
+                      value={extensionUrl}
+                      onChangeText={setExtensionUrl}
+                      placeholder="Extension URL or Repository"
+                      className="flex-1 bg-background"
+                    />
+                    <Button variant="secondary" size="default">
+                      <Text className="text-secondary-foreground text-sm font-bold">Add Extension</Text>
+                    </Button>
+                  </View>
+                  <View className="items-center justify-center py-16">
+                    <Text className="text-muted-foreground text-center">
+                      No extensions installed.{'\n'}Add extensions to enhance your experience.
+                    </Text>
+                  </View>
+                </View>
+              )}
+              {activeTab === 'repositories' && (
+                <View className="gap-3">
+                  <View className="flex-row gap-2">
+                    <Input
+                      value=""
+                      placeholder="Repository URL"
+                      className="flex-1 bg-background"
+                    />
+                    <Button variant="secondary" size="default">
+                      <Text className="text-secondary-foreground text-sm font-bold">Add Repository</Text>
+                    </Button>
+                  </View>
+                  <View className="items-center justify-center py-16">
+                    <Text className="text-muted-foreground text-center">
+                      No repositories added.
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
+          )}
+        </Tabs>
       </ScrollView>
     </View>
   )

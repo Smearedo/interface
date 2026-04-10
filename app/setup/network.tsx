@@ -3,34 +3,36 @@ import { View, Text, ScrollView } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Button, Input, Toggle } from '@/components/ui'
 import { SettingCard } from '@/components'
+import { SetupProgress } from '@/components/SetupProgress'
+import { SetupFooterCheck, type FooterCheck } from '@/components/SetupFooter'
 import { useSettingsStore } from '@/stores/settings'
-
-interface CheckResult {
-  status: 'warning' | 'success' | 'error'
-  text: string
-}
 
 export default function NetworkSetupPage () {
   const router = useRouter()
   const { settings, setSettings } = useSettingsStore()
-  const [speedCheck, setSpeedCheck] = useState<CheckResult | null>(null)
-  const [portCheck, setPortCheck] = useState<CheckResult | null>(null)
-  const [checkingSpeed, setCheckingSpeed] = useState(true)
-  const [checkingPort, setCheckingPort] = useState(true)
   const [hasForwarding, setHasForwarding] = useState(false)
+
+  const [speedCheck, setSpeedCheck] = useState<FooterCheck>({
+    label: 'Network Speed',
+    description: 'Checking network speed...',
+    status: 'checking'
+  })
+  const [portCheck, setPortCheck] = useState<FooterCheck>({
+    label: 'Port Forwarding',
+    description: 'Checking port forwarding availability...',
+    status: 'checking'
+  })
 
   useEffect(() => {
     // Simulate speed check
     const speedTimer = setTimeout(() => {
-      setSpeedCheck({ status: 'success', text: 'Network connection available.' })
-      setCheckingSpeed(false)
+      setSpeedCheck(prev => ({ ...prev, status: 'success', text: 'Network connection available.' }))
     }, 2000)
 
     // Simulate port check
     const portTimer = setTimeout(() => {
-      setPortCheck({ status: 'error', text: 'Not available. Peer discovery will suffer. Streaming old, poorly seeded anime might be impossible.' })
+      setPortCheck(prev => ({ ...prev, status: 'error', text: 'Not available. Peer discovery will suffer. Streaming old, poorly seeded anime might be impossible.' }))
       setHasForwarding(false)
-      setCheckingPort(false)
     }, 3000)
 
     return () => {
@@ -39,36 +41,11 @@ export default function NetworkSetupPage () {
     }
   }, [])
 
-  const allSettled = !checkingSpeed && !checkingPort
+  const allSettled = speedCheck.status !== 'checking' && portCheck.status !== 'checking'
 
   return (
     <View className="flex-1 bg-background">
-      {/* Progress indicator */}
-      <View className="px-6 mt-14 w-full items-center pb-5">
-        <View className="w-full max-w-4xl relative flex-row justify-around">
-          <View className="absolute top-5 left-0 right-0 h-2.5 rounded-full bg-secondary overflow-hidden">
-            <View className="h-full bg-white" style={{ width: '50%' }} />
-          </View>
-          <View className="w-20 items-center z-10">
-            <View className="w-12 h-12 rounded-full bg-foreground items-center justify-center">
-              <Text className="text-background font-bold">💾</Text>
-            </View>
-            <Text className="mt-3 font-bold text-foreground">Storage</Text>
-          </View>
-          <View className="w-20 items-center z-10">
-            <View className="w-12 h-12 rounded-full bg-foreground items-center justify-center">
-              <Text className="text-background font-bold">🌐</Text>
-            </View>
-            <Text className="mt-3 font-bold text-foreground">Network</Text>
-          </View>
-          <View className="w-20 items-center z-10">
-            <View className="w-12 h-12 rounded-full bg-secondary items-center justify-center">
-              <Text className="text-muted-foreground">🧩</Text>
-            </View>
-            <Text className="mt-3 font-bold text-muted-foreground">Extensions</Text>
-          </View>
-        </View>
-      </View>
+      <SetupProgress step={1} />
 
       <ScrollView className="flex-1 px-4" contentContainerStyle={{ gap: 12 }}>
         <SettingCard
@@ -91,7 +68,6 @@ export default function NetworkSetupPage () {
               onChangeText={(v) => setSettings({ torrentPort: parseInt(v) || 0 })}
               className="w-32 bg-background border-0"
             />
-            <Text className="text-foreground text-sm pr-3">Port</Text>
           </View>
         </SettingCard>
         <View className="flex-row items-center gap-3 px-4">
@@ -104,42 +80,8 @@ export default function NetworkSetupPage () {
       {/* Footer with checks */}
       <View className="px-6 w-full">
         <View className="border border-border rounded-t-lg bg-neutral-950 p-4 gap-3">
-          {/* Speed check */}
-          <View className="flex-row items-center">
-            {checkingSpeed ? (
-              <>
-                <Text className="text-muted-foreground text-xs mr-2.5">⏳</Text>
-                <Text className="text-foreground text-sm">Network Speed - </Text>
-                <Text className="text-muted-foreground text-xs">Checking network speed...</Text>
-              </>
-            ) : speedCheck ? (
-              <>
-                <Text className={`mr-2.5 ${speedCheck.status === 'success' ? 'text-green-500' : speedCheck.status === 'warning' ? 'text-yellow-500' : 'text-red-500'}`}>
-                  {speedCheck.status === 'success' ? '✓' : speedCheck.status === 'warning' ? '!' : '✗'}
-                </Text>
-                <Text className="text-foreground text-sm">Network Speed - </Text>
-                <Text className="text-muted-foreground text-xs flex-1">{speedCheck.text}</Text>
-              </>
-            ) : null}
-          </View>
-          {/* Port check */}
-          <View className="flex-row items-center">
-            {checkingPort ? (
-              <>
-                <Text className="text-muted-foreground text-xs mr-2.5">⏳</Text>
-                <Text className="text-foreground text-sm">Port Forwarding - </Text>
-                <Text className="text-muted-foreground text-xs">Checking port forwarding availability...</Text>
-              </>
-            ) : portCheck ? (
-              <>
-                <Text className={`mr-2.5 ${portCheck.status === 'success' ? 'text-green-500' : portCheck.status === 'warning' ? 'text-yellow-500' : 'text-red-500'}`}>
-                  {portCheck.status === 'success' ? '✓' : portCheck.status === 'warning' ? '!' : '✗'}
-                </Text>
-                <Text className="text-foreground text-sm">Port Forwarding - </Text>
-                <Text className="text-muted-foreground text-xs flex-1">{portCheck.text}</Text>
-              </>
-            ) : null}
-          </View>
+          <SetupFooterCheck check={speedCheck} />
+          <SetupFooterCheck check={portCheck} />
         </View>
         <View className="flex-row items-center justify-between bg-neutral-950 border border-t-0 border-border rounded-b-lg py-4 px-8">
           <Button variant="secondary" className="w-24" onPress={() => router.push('/setup/storage' as never)}>

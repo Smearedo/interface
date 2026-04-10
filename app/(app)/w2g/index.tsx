@@ -22,7 +22,7 @@ export default function W2GPage () {
     <View className="flex-1 bg-background items-center justify-center px-8">
       <Text className="text-foreground text-2xl font-bold">Watch Together</Text>
       <Text className="text-muted-foreground text-center mt-2">
-        Watch anime together with friends in real-time sync.
+        Watch videos together with friends in real-time sync. You can invite others to your lobby and chat while watching.
       </Text>
 
       <View className="w-full mt-8 gap-4">

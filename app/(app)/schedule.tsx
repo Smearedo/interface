@@ -105,7 +105,7 @@ export default function SchedulePage () {
                   {schedule.media.title.userPreferred}
                 </Text>
                 <Text className="text-muted-foreground text-xs mt-0.5">
-                  Episode {schedule.episode} • {format(new Date(schedule.airingAt * 1000), 'h:mm a')}
+                  #{schedule.episode} • {format(new Date(schedule.airingAt * 1000), 'HH:mm')}
                 </Text>
               </View>
             </Pressable>

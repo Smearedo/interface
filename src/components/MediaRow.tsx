@@ -25,7 +25,7 @@ export function MediaRow ({ title, media, loading, searchVariables }: MediaRowPr
           }
         }}
       >
-        <Text className="text-foreground font-semibold text-lg leading-none">{title}</Text>
+        <Text className="text-muted-foreground font-semibold text-lg leading-none">{title}</Text>
         <Text className="text-muted-foreground text-xs">View More</Text>
       </Pressable>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16 }}>

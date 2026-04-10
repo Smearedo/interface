@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, Pressable, Text } from 'react-native'
+import { View, Pressable } from 'react-native'
 import { useRouter, usePathname } from 'expo-router'
 import {
-  Home, Search, Calendar, Users, Download, Heart, User
+  Home, Search, Calendar, Users, Download, Heart, User, Zap
 } from 'lucide-react-native'
 import { cn } from '@/utils'
 
@@ -67,7 +67,7 @@ export function Sidebar () {
         onPress={() => router.push('/(app)/settings' as never)}
         className={cn('w-10 h-10 items-center justify-center rounded-md my-0.5', isActive('/settings') && 'bg-accent')}
       >
-        <Text className={isActive('/settings') ? 'text-foreground' : 'text-muted-foreground'}>⚡</Text>
+        <Zap size={18} color={isActive('/settings') ? '#fafafa' : '#a1a1aa'} />
       </Pressable>
 
       {/* Profile */}

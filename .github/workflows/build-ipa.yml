@@ -48,28 +48,24 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath "$RUNNER_TEMP/DerivedData" \
-            -archivePath "$RUNNER_TEMP/Hayase.xcarchive" \
-            archive \
-            CODE_SIGN_IDENTITY="-" \
+            build \
+            CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_ENTITLEMENTS="" \
             DEVELOPMENT_TEAM="" \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            SKIP_INSTALL=NO \
-            INSTALL_PATH="/Applications"
+            PROVISIONING_PROFILE_SPECIFIER=""
 
       - name: Package unsigned IPA
         run: |
           set -euo pipefail
 
-          # Find the .app bundle inside the archive
-          APP_PATH=$(find "$RUNNER_TEMP/Hayase.xcarchive/Products" -name "*.app" -type d | head -1)
+          # Find the .app bundle in DerivedData build products
+          APP_PATH=$(find "$RUNNER_TEMP/DerivedData/Build/Products/Release-iphoneos" -name "*.app" -type d | head -1)
           if [ -z "$APP_PATH" ]; then
-            echo "ERROR: No .app found in archive Products directory"
-            echo "Archive contents:"
-            find "$RUNNER_TEMP/Hayase.xcarchive" -type d -maxdepth 4
+            echo "ERROR: No .app found in DerivedData build products"
+            echo "DerivedData contents:"
+            find "$RUNNER_TEMP/DerivedData/Build/Products" -type d -maxdepth 3 2>/dev/null || echo "(Products dir not found)"
             exit 1
           fi
           echo "Found app: $APP_PATH"

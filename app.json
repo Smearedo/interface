@@ -4,11 +4,11 @@
     "slug": "hayase",
     "version": "6.4.282",
     "orientation": "default",
-    "icon": "./assets/logo.svg",
+    "icon": "./assets/icon.png",
     "scheme": "hayase",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/logo.svg",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -26,7 +26,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.svg",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
       "package": "app.hayase.interface"

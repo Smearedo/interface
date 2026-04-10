@@ -56,7 +56,9 @@ jobs:
             AD_HOC_CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_ENTITLEMENTS="" \
             DEVELOPMENT_TEAM="" \
-            PROVISIONING_PROFILE_SPECIFIER=""
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            SKIP_INSTALL=NO \
+            INSTALL_PATH="/Applications"
 
       - name: Package unsigned IPA
         run: |

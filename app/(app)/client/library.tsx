@@ -15,7 +15,13 @@ const columns = [
 export default function LibraryPage () {
   return (
     <View className="flex-1 bg-background">
-      <View className="flex-row items-center px-4 pt-4 pb-2 gap-2">
+      <View className="px-4 pt-4 pb-2">
+        <Text className="text-foreground text-2xl font-bold">Torrent Library</Text>
+        <Text className="text-muted-foreground">
+          All of your downloaded torrents. If Persist Files is enabled then your previously downloaded torrents will show up here.
+        </Text>
+      </View>
+      <View className="flex-row items-center px-4 pt-2 pb-2 gap-2">
         <Input
           placeholder="Search by Torrent Name..."
           className="flex-1 bg-black"

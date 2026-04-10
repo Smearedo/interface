@@ -11,7 +11,10 @@ export default function ClientPage () {
   return (
     <View className="flex-1 bg-background">
       <View className="px-4 py-3 border-b border-border">
-        <Text className="text-foreground font-semibold text-lg">Torrent Client</Text>
+        <Text className="text-foreground text-2xl font-bold">Torrent Client</Text>
+        <Text className="text-muted-foreground">
+          Monitor your torrents, and configure settings for your torrent client.
+        </Text>
       </View>
       <ScrollView className="flex-1 px-4 pt-4">
         {/* Status overview */}
@@ -40,8 +43,8 @@ export default function ClientPage () {
             <CardContent className="flex-row items-center pt-4 gap-3">
               <FolderOpen size={20} color="#a1a1aa" />
               <View>
-                <Text className="text-foreground text-sm font-medium">Library</Text>
-                <Text className="text-muted-foreground text-xs">Manage your torrent library</Text>
+                <Text className="text-foreground text-sm font-medium">Torrent Library</Text>
+                <Text className="text-muted-foreground text-xs">All of your downloaded torrents. If Persist Files is enabled then your previously downloaded torrents will show up here.</Text>
               </View>
             </CardContent>
           </Card>
@@ -52,8 +55,8 @@ export default function ClientPage () {
             <CardContent className="flex-row items-center pt-4 gap-3">
               <HardDrive size={20} color="#a1a1aa" />
               <View>
-                <Text className="text-foreground text-sm font-medium">Files</Text>
-                <Text className="text-muted-foreground text-xs">View downloaded files</Text>
+                <Text className="text-foreground text-sm font-medium">File List</Text>
+                <Text className="text-muted-foreground text-xs">Files in the currently active torrent, their download progress, and amount of active stream selections.</Text>
               </View>
             </CardContent>
           </Card>
@@ -64,8 +67,8 @@ export default function ClientPage () {
             <CardContent className="flex-row items-center pt-4 gap-3">
               <Users size={20} color="#a1a1aa" />
               <View>
-                <Text className="text-foreground text-sm font-medium">Peers</Text>
-                <Text className="text-muted-foreground text-xs">View connected peers</Text>
+                <Text className="text-foreground text-sm font-medium">Peer List</Text>
+                <Text className="text-muted-foreground text-xs">Peers connected to the currently active torrent, their statistics, region etc.</Text>
               </View>
             </CardContent>
           </Card>

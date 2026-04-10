@@ -59,6 +59,12 @@ export default function SchedulePage () {
 
   return (
     <View className="flex-1 bg-background">
+      <View className="px-4 pt-3 pb-2">
+        <Text className="text-foreground text-2xl font-bold">Airing Calendar</Text>
+        <Text className="text-muted-foreground">
+          View upcoming episodes and their air times for the current season.
+        </Text>
+      </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className="border-b border-border" contentContainerStyle={{ paddingHorizontal: 16 }}>
         {days.map((day, index) => (
           <Pressable

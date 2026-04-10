@@ -33,7 +33,7 @@ export default function SearchPage () {
   return (
     <View className="flex-1 bg-background px-4 pt-4">
       <Input
-        placeholder="Search anime..."
+        placeholder="Any"
         value={query}
         onChangeText={handleSearch}
         autoFocus

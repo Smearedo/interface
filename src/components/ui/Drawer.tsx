@@ -9,7 +9,7 @@ interface DrawerProps {
   className?: string
 }
 
-export function Drawer ({ open, onOpenChange, children, className }: DrawerProps) {
+export function Drawer ({ open, onOpenChange, children, _className }: DrawerProps) {
   return (
     <Modal
       visible={open}

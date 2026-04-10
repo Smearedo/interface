@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Image } from 'expo-image'
-import { cn } from '@/utils'
 import { Dialog, DialogHeader, DialogTitle, DialogFooter } from './ui/Dialog'
 import { Button } from './ui/Button'
 import { Input } from './ui/Input'

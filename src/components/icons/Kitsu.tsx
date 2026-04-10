@@ -6,7 +6,7 @@ interface KitsuProps {
   className?: string
 }
 
-export function Kitsu ({ size = 224, className }: KitsuProps) {
+export function Kitsu ({ size = 224, _className }: KitsuProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 224 224" fill="none">
       <G fill="none" fillRule="evenodd">

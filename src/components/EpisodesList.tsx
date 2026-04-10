@@ -25,7 +25,7 @@ interface EpisodesListProps {
 
 const PER_PAGE = 16
 
-export function EpisodesList ({ episodes, mediaId, onEpisodePress, progress = 0, className }: EpisodesListProps) {
+export function EpisodesList ({ episodes, _mediaId, onEpisodePress, progress = 0, className }: EpisodesListProps) {
   const totalPages = Math.ceil(episodes.length / PER_PAGE)
   const [currentPage, setCurrentPage] = useState(
     Math.floor(progress / PER_PAGE) + 1

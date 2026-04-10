@@ -6,7 +6,7 @@ interface MyAnimeListProps {
   className?: string
 }
 
-export function MyAnimeList ({ size = 24, className }: MyAnimeListProps) {
+export function MyAnimeList ({ size = 24, _className }: MyAnimeListProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path

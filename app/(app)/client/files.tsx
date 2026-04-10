@@ -8,6 +8,12 @@ export default function FilesPage () {
   return (
     <View className="flex-1 bg-background">
       <View className="px-4 pt-4 pb-2">
+        <Text className="text-foreground text-2xl font-bold">File List</Text>
+        <Text className="text-muted-foreground">
+          Files in the currently active torrent, their download progress, and amount of active stream selections.
+        </Text>
+      </View>
+      <View className="px-4 pt-2 pb-2">
         <Input
           placeholder="Search by File Name..."
           className="bg-black"

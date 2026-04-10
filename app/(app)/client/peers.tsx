@@ -16,6 +16,12 @@ const columns = [
 export default function PeersPage () {
   return (
     <View className="flex-1 bg-background">
+      <View className="px-4 pt-4 pb-2">
+        <Text className="text-foreground text-2xl font-bold">Peer List</Text>
+        <Text className="text-muted-foreground">
+          Peers connected to the currently active torrent, their statistics, region etc.
+        </Text>
+      </View>
       <View className="flex-1 m-4 rounded-md border border-border overflow-hidden">
         <ScrollView horizontal>
           <View className="min-w-full">

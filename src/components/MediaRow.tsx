@@ -31,7 +31,7 @@ export function MediaRow ({ title, media, loading, error, searchVariables }: Med
       </Pressable>
       {error ? (
         <View className="px-4 py-8 items-center">
-          <Text className="text-foreground font-bold text-lg mb-1">Oooops!</Text>
+          <Text className="text-foreground font-bold text-lg mb-1">Ooops!</Text>
           <Text className="text-muted-foreground text-sm text-center">Looks like something went wrong!</Text>
           <Text className="text-muted-foreground text-xs mt-1">{error}</Text>
         </View>

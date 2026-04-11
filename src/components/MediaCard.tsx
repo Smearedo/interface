@@ -43,11 +43,10 @@ export function MediaCard ({ media, className }: MediaCardProps) {
         <Text className="text-foreground text-xs font-black leading-tight" numberOfLines={2}>
           {media.mediaListEntry?.status && (
             <Text>
-              <StatusDot status={
-                media.mediaListEntry.status === 'CURRENT' ? 'online'
-                : media.mediaListEntry.status === 'PLANNING' ? 'idle'
-                : media.mediaListEntry.status === 'COMPLETED' ? 'offline'
-                : 'error'
+              <StatusDot status={media.mediaListEntry.status as 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'PAUSED' | 'REPEATING' | 'DROPPED'} />
+              {'  '}
+            </Text>
+          )}
               } />
               {'  '}
             </Text>

@@ -21,6 +21,7 @@ module.exports = {
         ring: '#d4d4d8',
         background: '#09090b',
         foreground: '#fafafa',
+        theme: '#e5204c',
         primary: {
           DEFAULT: '#fafafa',
           foreground: '#18181b'

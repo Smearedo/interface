@@ -127,7 +127,7 @@ export function since (date: Date): string {
         return relativeFormatter.format(Math.round(delta), key)
       }
       const abs = Math.abs(Math.round(delta))
-      return `${abs} ${key} ago`
+      return delta < 0 ? `${abs} ${key} ago` : `in ${abs} ${key}`
     }
   }
   return 'now'

@@ -9,6 +9,7 @@ import { Skeleton } from './ui/Skeleton'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const BANNER_HEIGHT = 340
+const CAROUSEL_INTERVAL_MS = 15000
 
 function shuffleAndFilter (media: Array<Media | null>): Media[] {
   const filtered = (media.filter(m => m != null && (m.bannerImage || m.trailer?.id)) as Media[]).slice(0, 5)
@@ -58,7 +59,7 @@ export function Banner () {
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
       goTo(currentIdx + 1)
-    }, 15000)
+    }, CAROUSEL_INTERVAL_MS)
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }

@@ -37,9 +37,9 @@ export default function HomePage () {
     // Add logged-in user sections at the beginning if authenticated
     if (hasAuth && anilistViewer) {
       allSections.unshift(
-        { title: 'Continue Watching', variables: { sort: ['UPDATED_AT_DESC'], status: 'CURRENT' as unknown as string }, data: null, loading: true, error: null },
-        { title: 'Your List', variables: { sort: ['START_DATE_DESC'], status_in: ['FINISHED', 'RELEASING'] as unknown as string } as SearchVariables, data: null, loading: true, error: null },
-        { title: 'Sequels You Missed', variables: { sort: ['POPULARITY_DESC'], status_in: ['FINISHED', 'RELEASING'] as unknown as string } as SearchVariables, data: null, loading: true, error: null }
+        { title: 'Continue Watching', variables: { sort: ['UPDATED_AT_DESC'], status: ['CURRENT'] }, data: null, loading: true, error: null },
+        { title: 'Your List', variables: { sort: ['START_DATE_DESC'], status: ['FINISHED', 'RELEASING'] }, data: null, loading: true, error: null },
+        { title: 'Sequels You Missed', variables: { sort: ['POPULARITY_DESC'], status: ['FINISHED', 'RELEASING'] }, data: null, loading: true, error: null }
       )
     }
 

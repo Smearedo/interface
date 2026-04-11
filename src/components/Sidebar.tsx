@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Pressable } from 'react-native'
 import { useRouter, usePathname } from 'expo-router'
 import {
-  Home, Search, Calendar, Users, Download, Heart, LogIn, Zap
+  Home, Search, Calendar, Users, Download, Heart, LogIn, Zap, User
 } from 'lucide-react-native'
 import { useAuthStore } from '@/stores/auth'
 import { cn } from '@/utils'
@@ -10,7 +10,7 @@ import { cn } from '@/utils'
 export function Sidebar () {
   const router = useRouter()
   const pathname = usePathname()
-  const { anilistToken } = useAuthStore()
+  const hasAuth = useAuthStore((s) => s.hasAuth())
 
   const isActive = (path: string) => pathname.includes(path.replace('/(app)', ''))
 
@@ -72,12 +72,16 @@ export function Sidebar () {
         <Zap size={18} color={isActive('/settings') ? '#fafafa' : '#a1a1aa'} />
       </Pressable>
 
-      {/* Profile - shows LogIn when not authenticated, like HEAD */}
+      {/* Profile - shows avatar when logged in, LogIn when not, like HEAD */}
       <Pressable
         onPress={() => router.push('/(app)/profile' as never)}
         className={cn('w-10 h-10 items-center justify-center rounded-md my-0.5', isActive('/profile') && 'bg-accent')}
       >
-        <LogIn size={18} color={isActive('/profile') ? '#fafafa' : '#a1a1aa'} />
+        {hasAuth ? (
+          <User size={18} color={isActive('/profile') ? '#fafafa' : '#a1a1aa'} />
+        ) : (
+          <LogIn size={18} color={isActive('/profile') ? '#fafafa' : '#a1a1aa'} />
+        )}
       </Pressable>
     </View>
   )

@@ -1,22 +1,27 @@
 import React from 'react'
-import { View, Text, Pressable, Dimensions } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
+import { Calendar, Tv } from 'lucide-react-native'
 import { cn } from '@/utils'
 import type { Media } from '@/modules/anilist/util'
-import { title as getTitle, cover, getBGColorForRating } from '@/modules/anilist/util'
+import { title as getTitle, cover, format } from '@/modules/anilist/util'
+import { StatusDot } from './StatusDot'
 
 interface MediaCardProps {
   media: Media
   className?: string
 }
 
-const CARD_WIDTH = (Dimensions.get('window').width - 48) / 3
+// HEAD uses 9.5rem width (152px) with 152/290 aspect ratio
+const CARD_WIDTH = 110
 
 export function MediaCard ({ media, className }: MediaCardProps) {
   const router = useRouter()
   const coverUrl = cover(media)
   const mediaTitle = getTitle(media)
+  const mediaFormat = format(media)
+  const yearDisplay = media.seasonYear ?? media.startDate?.year ?? 'TBA'
 
   return (
     <Pressable
@@ -24,7 +29,7 @@ export function MediaCard ({ media, className }: MediaCardProps) {
       style={{ width: CARD_WIDTH }}
       onPress={() => router.push(`/(app)/anime/${media.id}` as never)}
     >
-      <View className="rounded-md overflow-hidden bg-muted" style={{ width: CARD_WIDTH, height: CARD_WIDTH * 1.5 }}>
+      <View className="rounded overflow-hidden bg-muted" style={{ width: CARD_WIDTH, height: CARD_WIDTH * 1.42 }}>
         {coverUrl && (
           <Image
             source={{ uri: coverUrl }}
@@ -33,20 +38,33 @@ export function MediaCard ({ media, className }: MediaCardProps) {
             transition={200}
           />
         )}
-        {media.averageScore != null && (
-          <View className={cn('absolute top-1 right-1 rounded px-1.5 py-0.5', getBGColorForRating(media.averageScore))}>
-            <Text className="text-white text-xs font-bold">{media.averageScore}%</Text>
-          </View>
-        )}
-        {media.mediaListEntry?.status && (
-          <View className="absolute top-1 left-1 bg-black/70 rounded px-1.5 py-0.5">
-            <Text className="text-white text-xs">{media.mediaListEntry.status}</Text>
-          </View>
-        )}
       </View>
-      <Text className="text-foreground text-xs mt-1.5 leading-tight" numberOfLines={2}>
-        {mediaTitle}
-      </Text>
+      <View className="pt-1.5">
+        <Text className="text-foreground text-xs font-black leading-tight" numberOfLines={2}>
+          {media.mediaListEntry?.status && (
+            <Text>
+              <StatusDot status={
+                media.mediaListEntry.status === 'CURRENT' ? 'online'
+                : media.mediaListEntry.status === 'PLANNING' ? 'idle'
+                : media.mediaListEntry.status === 'COMPLETED' ? 'offline'
+                : 'error'
+              } />
+              {'  '}
+            </Text>
+          )}
+          {mediaTitle}
+        </Text>
+      </View>
+      <View className="flex-row justify-between mt-auto pt-1.5">
+        <View className="flex-row items-center">
+          <Calendar size={12} color="#737373" />
+          <Text className="text-neutral-500 text-xs font-medium ml-1">{yearDisplay}</Text>
+        </View>
+        <View className="flex-row items-center">
+          <Text className="text-neutral-500 text-xs font-medium mr-1">{mediaFormat}</Text>
+          <Tv size={12} color="#737373" />
+        </View>
+      </View>
     </Pressable>
   )
 }

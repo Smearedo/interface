@@ -100,7 +100,13 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
   }
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat('en')
+let relativeFormatter: Intl.RelativeTimeFormat | null = null
+try {
+  relativeFormatter = new Intl.RelativeTimeFormat('en')
+} catch {
+  // Fallback for environments without Intl.RelativeTimeFormat
+}
+
 const sinceRanges: Partial<Record<Intl.RelativeTimeFormatUnit, number>> = {
   years: 3600 * 24 * 365,
   months: 3600 * 24 * 30,
@@ -117,7 +123,11 @@ export function since (date: Date): string {
     const key = _key as Intl.RelativeTimeFormatUnit
     if ((sinceRanges[key] ?? 0) < Math.abs(secondsElapsed)) {
       const delta = secondsElapsed / (sinceRanges[key] ?? 0)
-      return relativeFormatter.format(Math.round(delta), key)
+      if (relativeFormatter) {
+        return relativeFormatter.format(Math.round(delta), key)
+      }
+      const abs = Math.abs(Math.round(delta))
+      return `${abs} ${key} ago`
     }
   }
   return 'now'

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useFonts } from 'expo-font'
@@ -45,7 +45,7 @@ export default function RootLayout () {
   if (!fontsLoaded) return null
 
   return (
-    <View className="flex-1 bg-black">
+    <GestureHandlerRootView className="flex-1 bg-black">
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -54,6 +54,6 @@ export default function RootLayout () {
           animation: 'fade'
         }}
       />
-    </View>
+    </GestureHandlerRootView>
   )
 }

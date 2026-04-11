@@ -13,7 +13,7 @@ const titleTypes = {
 } as const
 
 export default function AccountsSettingsPage () {
-  const { anilistToken, malToken, kitsuToken } = useAuthStore()
+  const { anilistToken, malToken, kitsuToken, syncSettings } = useAuthStore()
   const [kitsuLogin, setKitsuLogin] = useState('')
   const [kitsuPassword, setKitsuPassword] = useState('')
 
@@ -56,7 +56,7 @@ export default function AccountsSettingsPage () {
             )}
           </View>
           <View className="flex-row items-center gap-2">
-            <Toggle value={true} onValueChange={() => {}} />
+            <Toggle value={syncSettings.al} onValueChange={(v) => useAuthStore.getState().setSyncSettings({ al: v })} />
             <Text className="text-foreground text-sm">Enable Sync</Text>
           </View>
         </View>
@@ -91,10 +91,15 @@ export default function AccountsSettingsPage () {
             </Button>
           )}
           <View className="flex-row items-center gap-2">
-            <Toggle value={true} onValueChange={() => {}} />
+            <Toggle value={syncSettings.kitsu} onValueChange={(v) => useAuthStore.getState().setSyncSettings({ kitsu: v })} />
             <Text className="text-foreground text-sm">Enable Sync</Text>
           </View>
         </View>
+        {!kitsuToken && (
+          <Text className="text-muted-foreground text-[10px] px-2 mt-1">
+            Your password is not stored in the app, it is sent directly to Kitsu for authentication.
+          </Text>
+        )}
       </View>
 
       {/* MyAnimeList */}
@@ -128,7 +133,7 @@ export default function AccountsSettingsPage () {
             )}
           </View>
           <View className="flex-row items-center gap-2">
-            <Toggle value={true} onValueChange={() => {}} />
+            <Toggle value={syncSettings.mal} onValueChange={(v) => useAuthStore.getState().setSyncSettings({ mal: v })} />
             <Text className="text-foreground text-sm">Enable Sync</Text>
           </View>
         </View>
@@ -145,7 +150,7 @@ export default function AccountsSettingsPage () {
         <View className="bg-neutral-950 px-6 py-4 rounded-b-md flex-row justify-end items-center gap-4" style={{ height: 68 }}>
           <Text className="text-muted-foreground text-xs">Works Offline</Text>
           <View className="flex-row items-center gap-2">
-            <Toggle value={true} onValueChange={() => {}} />
+            <Toggle value={syncSettings.local} onValueChange={(v) => useAuthStore.getState().setSyncSettings({ local: v })} />
             <Text className="text-foreground text-sm">Enable Sync</Text>
           </View>
         </View>

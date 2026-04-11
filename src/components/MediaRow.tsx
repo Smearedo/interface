@@ -9,10 +9,11 @@ interface MediaRowProps {
   title: string
   media: Media[] | null | undefined
   loading?: boolean
+  error?: string | null
   searchVariables?: Record<string, unknown> | import('@/modules/anilist/client').SearchVariables
 }
 
-export function MediaRow ({ title, media, loading, searchVariables }: MediaRowProps) {
+export function MediaRow ({ title, media, loading, error, searchVariables }: MediaRowProps) {
   const router = useRouter()
 
   return (
@@ -28,20 +29,28 @@ export function MediaRow ({ title, media, loading, searchVariables }: MediaRowPr
         <Text className="text-muted-foreground font-semibold text-lg leading-none">{title}</Text>
         <Text className="text-muted-foreground text-xs">View More</Text>
       </Pressable>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16 }}>
-        {loading ? (
-          Array.from({ length: 5 }).map((_, i) => (
-            <View key={i} className="mr-2" style={{ width: 110 }}>
-              <Skeleton style={{ width: 110, height: 165, borderRadius: 6 }} />
-              <Skeleton className="mt-1.5" style={{ width: 90, height: 12, borderRadius: 4 }} />
-            </View>
-          ))
-        ) : (
-          media?.map((item) => (
-            <MediaCard key={item.id} media={item} />
-          ))
-        )}
-      </ScrollView>
+      {error ? (
+        <View className="px-4 py-8 items-center">
+          <Text className="text-foreground font-bold text-lg mb-1">Oooops!</Text>
+          <Text className="text-muted-foreground text-sm text-center">Looks like something went wrong!</Text>
+          <Text className="text-muted-foreground text-xs mt-1">{error}</Text>
+        </View>
+      ) : (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16 }}>
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <View key={i} className="mr-2" style={{ width: 110 }}>
+                <Skeleton style={{ width: 110, height: 165, borderRadius: 6 }} />
+                <Skeleton className="mt-1.5" style={{ width: 90, height: 12, borderRadius: 4 }} />
+              </View>
+            ))
+          ) : (
+            media?.map((item) => (
+              <MediaCard key={item.id} media={item} />
+            ))
+          )}
+        </ScrollView>
+      )}
     </View>
   )
 }

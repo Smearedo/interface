@@ -75,57 +75,6 @@ export default function ClientSettingsPage () {
             <Text className="text-foreground text-sm pr-3">Mb/s</Text>
           </View>
         </SettingCard>
-        <SettingCard
-          title="Max Number of Connections"
-          description="Number of peers per torrent. Higher values will increase download speeds but might quickly fill up available ports if your ISP limits the maximum allowed number of open connections."
-        >
-          <Input
-            keyboardType="numeric"
-            value={String(settings.maxConns)}
-            onChangeText={(v) => setSettings({ maxConns: parseInt(v) || 0 })}
-            className="w-32 bg-background"
-          />
-        </SettingCard>
-        <SettingCard
-          title="Forwarded Torrent Port"
-          description="Forwarded port used for incoming torrent connections. 0 automatically finds an open unused port. Change this to a specific port if you forwarded manually, or if you use a VPN"
-        >
-          <Input
-            keyboardType="numeric"
-            value={String(settings.torrentPort)}
-            onChangeText={(v) => setSettings({ torrentPort: parseInt(v) || 0 })}
-            className="w-32 bg-background"
-          />
-        </SettingCard>
-        <SettingCard
-          title="DHT Port"
-          description="Port used for DHT connections. 0 is automatic."
-        >
-          <Input
-            keyboardType="numeric"
-            value={String(settings.dhtPort)}
-            onChangeText={(v) => setSettings({ dhtPort: parseInt(v) || 0 })}
-            className="w-32 bg-background"
-          />
-        </SettingCard>
-        <SettingCard
-          title="Disable DHT"
-          description="Disables Distributed Hash Tables for use in private trackers to improve privacy. Might greatly reduce the amount of discovered peers."
-        >
-          <Toggle
-            value={settings.torrentDHT}
-            onValueChange={(v) => setSettings({ torrentDHT: v })}
-          />
-        </SettingCard>
-        <SettingCard
-          title="Disable PeX"
-          description="Disables Peer Exchange for use in private trackers to improve privacy. Might greatly reduce the amount of discovered peers."
-        >
-          <Toggle
-            value={settings.torrentPeX}
-            onValueChange={(v) => setSettings({ torrentPeX: v })}
-          />
-        </SettingCard>
       </ScrollView>
     </View>
   )

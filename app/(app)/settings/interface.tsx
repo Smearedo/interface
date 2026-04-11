@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Platform } from 'react-native'
 import { SettingCard } from '@/components'
 import { Toggle, Slider } from '@/components/ui'
 import { useSettingsStore } from '@/stores/settings'
@@ -10,6 +10,21 @@ export default function InterfaceSettingsPage () {
   return (
     <View className="flex-1 bg-background">
       <ScrollView className="flex-1" contentContainerStyle={{ gap: 12, padding: 16 }}>
+        {Platform.OS !== 'android' && (
+          <>
+            <Text className="text-xl font-bold text-foreground">Rich Presence Settings</Text>
+            <SettingCard
+              title="Show Details in Discord Rich Presence"
+              description="Shows currently played anime and episode in Discord rich presence."
+            >
+              <Toggle
+                value={settings.showDetailsInRPC}
+                onValueChange={(v) => setSettings({ showDetailsInRPC: v })}
+              />
+            </SettingCard>
+          </>
+        )}
+
         <Text className="text-xl font-bold text-foreground">Visibility Settings</Text>
         <SettingCard
           title="Show Hentai"
@@ -52,6 +67,14 @@ export default function InterfaceSettingsPage () {
             onValueChange={(v) => setSettings({ showNavigation: v })}
           />
         </SettingCard>
+        {Platform.OS !== 'android' && (
+          <SettingCard
+            title="ANGLE Backend"
+            description="What ANGLE backend to use for rendering. DON'T CHANGE WITHOUT REASON! On some Windows machines D3D9 might help with flicker. Changing this setting to something your device doesn't support might prevent Hayase from opening which will require a full reinstall. While Vulkan is an available option it might not be fully supported on Linux."
+          >
+            <Text className="text-muted-foreground text-sm">{settings.angle || 'default'}</Text>
+          </SettingCard>
+        )}
       </ScrollView>
     </View>
   )

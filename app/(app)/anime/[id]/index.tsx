@@ -48,11 +48,15 @@ const statusDotMap: Record<string, 'online' | 'idle' | 'offline' | 'error'> = {
   HIATUS: 'idle'
 }
 
+const TABS = ['Episodes', 'Relations', 'Threads', 'Themes'] as const
+type TabValue = typeof TABS[number]
+
 export default function AnimeDetailPage () {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
   const [media, setMedia] = useState<Media | null>(null)
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<TabValue>('Episodes')
 
   useEffect(() => {
     if (!id) return
@@ -205,51 +209,78 @@ export default function AnimeDetailPage () {
             <InfoRow label="Genres" value={media.genres?.join(', ')} />
           </View>
 
-          {/* Relations */}
-          {allRelations.length > 0 && (
-            <>
-              <Separator className="my-4" />
-              <Text className="text-foreground font-semibold text-base mb-3">Relations</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {allRelations.map((edge, index) => {
-                  if (!edge.node) return null
-                  const relLabel = relation(edge.relationType ?? null)
-                  return (
-                    <View key={index} className="mr-3">
-                      <MediaCard media={edge.node} />
-                      <Text className="text-muted-foreground text-xs mt-0.5 w-[100px]" numberOfLines={1}>
-                        {relLabel}
-                      </Text>
-                    </View>
-                  )
-                })}
-              </ScrollView>
-            </>
+          <Separator className="my-4" />
+
+          {/* Tab navigation - matching HEAD's tab structure */}
+          <View className="flex-row justify-center mb-4">
+            {TABS.map((tab) => (
+              <Pressable
+                key={tab}
+                onPress={() => setActiveTab(tab)}
+                className={`px-6 py-2 rounded ${activeTab === tab ? 'bg-foreground' : 'bg-transparent'}`}
+              >
+                <Text className={`text-sm font-bold ${activeTab === tab ? 'text-background' : 'text-foreground'}`}>
+                  {tab}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          {/* Tab content */}
+          {activeTab === 'Episodes' && (
+            <View>
+              {totalEps > 0 ? (
+                <View className="bg-neutral-950 rounded-md p-4">
+                  <Text className="text-muted-foreground text-sm">
+                    {totalEps} episode{totalEps !== 1 ? 's' : ''}
+                  </Text>
+                  <Text className="text-neutral-500 text-xs mt-1">
+                    Select a source to view episodes
+                  </Text>
+                </View>
+              ) : (
+                <Text className="text-muted-foreground text-sm">No episode data available</Text>
+              )}
+            </View>
           )}
 
-          {/* Episodes placeholder */}
-          <Separator className="my-4" />
-          <Text className="text-foreground font-semibold text-base mb-3">Episodes</Text>
-          {totalEps > 0 ? (
+          {activeTab === 'Relations' && (
+            <View>
+              {allRelations.length > 0 ? (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {allRelations.map((edge, index) => {
+                    if (!edge.node) return null
+                    const relLabel = relation(edge.relationType ?? null)
+                    return (
+                      <View key={index} className="mr-3">
+                        <MediaCard media={edge.node} />
+                        <Text className="text-muted-foreground text-xs mt-0.5 w-[100px]" numberOfLines={1}>
+                          {relLabel}
+                        </Text>
+                      </View>
+                    )
+                  })}
+                </ScrollView>
+              ) : (
+                <Text className="text-muted-foreground text-sm">No relations found</Text>
+              )}
+            </View>
+          )}
+
+          {activeTab === 'Threads' && (
+            <View className="bg-neutral-950 rounded-md p-4 flex-row items-center gap-3">
+              <MessageSquare size={18} color="#a1a1aa" />
+              <Text className="text-muted-foreground text-sm">Forum threads coming soon</Text>
+            </View>
+          )}
+
+          {activeTab === 'Themes' && (
             <View className="bg-neutral-950 rounded-md p-4">
               <Text className="text-muted-foreground text-sm">
-                {totalEps} episode{totalEps !== 1 ? 's' : ''}
-              </Text>
-              <Text className="text-neutral-500 text-xs mt-1">
-                Select a source to view episodes
+                Anime themes are not available on mobile yet
               </Text>
             </View>
-          ) : (
-            <Text className="text-muted-foreground text-sm">No episode data available</Text>
           )}
-
-          {/* Threads / Forums placeholder */}
-          <Separator className="my-4" />
-          <Text className="text-foreground font-semibold text-base mb-3">Threads</Text>
-          <View className="bg-neutral-950 rounded-md p-4 flex-row items-center gap-3">
-            <MessageSquare size={18} color="#a1a1aa" />
-            <Text className="text-muted-foreground text-sm">Forum threads coming soon</Text>
-          </View>
         </View>
       </ScrollView>
     </View>

@@ -46,10 +46,10 @@ export async function anilistMutation<T> (mutation: string, variables?: Record<s
 
 // Search query
 const SEARCH_QUERY = `
-query ($page: Int, $perPage: Int, $search: String, $sort: [MediaSort], $season: MediaSeason, $seasonYear: Int, $genre: [String], $ids: [Int], $status: [MediaStatus], $onList: Boolean, $isAdult: Boolean) {
+query ($page: Int, $perPage: Int, $search: String, $sort: [MediaSort], $season: MediaSeason, $seasonYear: Int, $genre: [String], $ids: [Int], $status: [MediaStatus], $statusNot: [MediaStatus], $onList: Boolean, $isAdult: Boolean) {
   Page(page: $page, perPage: $perPage) {
     pageInfo { hasNextPage, total }
-    media(search: $search, sort: $sort, season: $season, seasonYear: $seasonYear, genre_in: $genre, id_in: $ids, status_in: $status, onList: $onList, type: ANIME, isAdult: $isAdult) {
+    media(search: $search, sort: $sort, season: $season, seasonYear: $seasonYear, genre_in: $genre, id_in: $ids, status_in: $status, status_not_in: $statusNot, onList: $onList, type: ANIME, isAdult: $isAdult) {
       id, idMal, title { romaji, english, native, userPreferred },
       coverImage { extraLarge, medium, color },
       bannerImage, format, status, episodes, season, seasonYear,
@@ -72,6 +72,7 @@ export interface SearchVariables {
   genre?: string[]
   ids?: number[]
   status?: string[]
+  statusNot?: string[]
   onList?: boolean
   isAdult?: boolean | null
 }

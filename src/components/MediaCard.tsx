@@ -47,10 +47,6 @@ export function MediaCard ({ media, className }: MediaCardProps) {
               {'  '}
             </Text>
           )}
-              } />
-              {'  '}
-            </Text>
-          )}
           {mediaTitle}
         </Text>
       </View>

@@ -31,9 +31,9 @@ export function MediaRow ({ title, media, loading, error, searchVariables }: Med
       </Pressable>
       {error ? (
         <View className="px-4 py-8 items-center">
-          <Text className="text-foreground font-bold text-lg mb-1">Ooops!</Text>
-          <Text className="text-muted-foreground text-sm text-center">Looks like something went wrong!</Text>
-          <Text className="text-muted-foreground text-xs mt-1">{error}</Text>
+          <Text className="text-foreground font-bold text-4xl text-center mb-1">Ooops!</Text>
+          <Text className="text-muted-foreground text-lg text-center">Looks like something went wrong!</Text>
+          <Text className="text-muted-foreground text-lg text-center">{error}</Text>
         </View>
       ) : (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16 }}>
@@ -44,8 +44,13 @@ export function MediaRow ({ title, media, loading, error, searchVariables }: Med
                 <Skeleton className="mt-1.5" style={{ width: 90, height: 12, borderRadius: 4 }} />
               </View>
             ))
+          ) : !media?.length ? (
+            <View className="px-4 py-8 items-center justify-center" style={{ width: 300, height: 200 }}>
+              <Text className="text-foreground font-bold text-4xl text-center mb-1">Ooops!</Text>
+              <Text className="text-muted-foreground text-lg text-center">Looks like there's nothing here.</Text>
+            </View>
           ) : (
-            media?.map((item) => (
+            media.map((item) => (
               <MediaCard key={item.id} media={item} />
             ))
           )}
